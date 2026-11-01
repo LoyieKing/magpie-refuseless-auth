@@ -171,6 +171,20 @@ async function getJSON(url, key, signal) {
   return { res, body: await res.json().catch(() => null) }
 }
 
+function creditsOf(c) {
+  const balance = Number.isFinite(c?.balance) && c.balance >= 0 ? c.balance : 0
+  const reserved = Number.isFinite(c?.reserved) && c.reserved >= 0 ? c.reserved : 0
+  const available =
+    Number.isFinite(c?.available) && c.available >= 0 ? c.available : Math.max(0, balance - reserved)
+
+  // A key with no budget holds the account's money: that is a balance, not a
+  // window. A key with one has an allowance, so show what it can still spend.
+  if (c?.key_limit == null) {
+    return { plan: "Prepaid credits", balance: usd(balance), windows: [] }
+  }
+  return { plan: "Prepaid credits", windows: [{ name: "Credits", balance: available, unit: "USD" }] }
+}
+
 const Refuseless = async () => ({
   config: async (cfg) => {
     cfg.provider ??= {}
@@ -221,20 +235,7 @@ const Refuseless = async () => ({
         return { error: `Refuseless's credit API answered ${r.res.status}.`, windows: [] }
       }
 
-      const c = r.body ?? {}
-      const balance = Number.isFinite(c.balance) && c.balance >= 0 ? c.balance : 0
-      const reserved = Number.isFinite(c.reserved) && c.reserved >= 0 ? c.reserved : 0
-      const available =
-        Number.isFinite(c.available) && c.available >= 0 ? c.available : Math.max(0, balance - reserved)
-
-      const out = {
-        plan: "Prepaid credits",
-        windows: [{ name: "Credits", balance: available, unit: "USD" }],
-      }
-      // the wallet window is what a request can reserve; the account's total
-      // is worth a second figure when a key budget or a hold makes them differ
-      if (balance > available + 1e-9) out.balance = usd(balance)
-      return out
+      return creditsOf(r.body ?? {})
     },
   },
 
@@ -272,4 +273,4 @@ export default {
 }
 
 // Functions tests can reach without being loaded as plugins.
-export const _internal = { modelOf, prettyName, usd, CATALOG }
+export const _internal = { creditsOf, modelOf, prettyName, usd, CATALOG }

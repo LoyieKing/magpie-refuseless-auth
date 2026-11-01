@@ -3,7 +3,7 @@ import test from "node:test"
 
 import { _internal } from "../index.mjs"
 
-const { CATALOG, modelOf, prettyName, usd } = _internal
+const { CATALOG, creditsOf, modelOf, prettyName, usd } = _internal
 
 test("model names for the catalog and later ids", () => {
   assert.equal(prettyName("glm-5.3-flash-abliterated"), "GLM 5.3 Flash Abliterated")
@@ -55,4 +55,26 @@ test("the fallback catalog covers the five live models", () => {
     "glm-5.3-flash-abliterated",
     "minimax-m3.1-flash",
   ])
+})
+
+test("a key without a budget shows the account balance", () => {
+  assert.deepEqual(creditsOf({ balance: 20.657952, reserved: 0, available: 20.657952, key_limit: null }), {
+    plan: "Prepaid credits",
+    balance: "$20.657952",
+    windows: [],
+  })
+})
+
+test("a key with a budget shows what it can still spend", () => {
+  assert.deepEqual(creditsOf({ balance: 20.65, reserved: 0.01, available: 0.999942, key_limit: 0.999942 }), {
+    plan: "Prepaid credits",
+    windows: [{ name: "Credits", balance: 0.999942, unit: "USD" }],
+  })
+})
+
+test("an exhausted key budget is still a window, not a zero balance", () => {
+  assert.deepEqual(creditsOf({ balance: 20, reserved: 0, available: 0, key_limit: 0 }), {
+    plan: "Prepaid credits",
+    windows: [{ name: "Credits", balance: 0, unit: "USD" }],
+  })
 })

@@ -27,7 +27,7 @@ In the app, open the plugin, click sign in on the Refuseless row, and paste the 
 
 ## Credits
 
-The account's usage comes from `GET /v1/credits`, which costs nothing. The card shows the available USD balance (`available`, after holds from in-flight requests). When a key has its own budget or holds are active, the account's total balance is shown as well.
+The account's usage comes from `GET /v1/credits`, which costs nothing. A key without its own budget shows the account's USD balance. A key with a budget shows what it can still spend as a credit window, capped by `key_limit` and holds from in-flight requests.
 
 ## Models
 
