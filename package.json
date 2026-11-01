@@ -1,0 +1,31 @@
+{
+  "name": "magpie-refuseless-auth",
+  "version": "0.1.0",
+  "description": "OpenCode and magpie provider plugin: Refuseless, refusal-removed open-weight models",
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./server": "./index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "icon.svg",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "refuseless",
+    "magpie",
+    "magpie-plugin"
+  ],
+  "license": "MIT",
+  "magpie": {
+    "name": "Refuseless",
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJSZWZ1c2VsZXNzIj4KICA8ZyBzdHJva2U9IiNDODEwMkUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogICAgPHBhdGggZD0iTTEyIDEyYy0yLTIuNjctNC00LTYtNGE0IDQgMCAxIDAgMCA4YzIgMCA0LTEuMzMgNi00Wm0wIDBjMiAyLjY3IDQgNCA2IDRhNCA0IDAgMCAwIDAtOGMtMiAwLTQgMS4zMy02IDRaIi8+CiAgPC9nPgo8L3N2Zz4K"
+  }
+}
